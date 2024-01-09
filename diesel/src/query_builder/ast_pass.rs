@@ -257,13 +257,12 @@ where
     #[diesel_derives::__diesel_public_if(
         feature = "i-implement-a-third-party-backend-and-opt-into-breaking-changes"
     )]
-    pub(crate) fn push_bind_collector_data<MD>(
+    pub(crate) fn push_bind_collector_data(
         &mut self,
-        bind_collector_data: &MD,
+        bind_collector_data: &'b <DB::BindCollector<'b> as MovableBindCollector<DB>>::MovableData,
     ) -> QueryResult<()>
     where
-        DB: Backend,
-        for<'bc> DB::BindCollector<'bc>: MovableBindCollector<DB, MovableData = MD>,
+        DB::BindCollector<'b>: MovableBindCollector<DB>,
         // binds: Vec<<<DB as Backend>::BindCollector<'param> as IntoBinds<'param, DB>>::OwnedBuffer>,
         // for<'mbc> MD: MovableBindCollector<'mbc, DB>::MovableData,
     {
